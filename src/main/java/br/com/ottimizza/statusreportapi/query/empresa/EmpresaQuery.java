@@ -39,6 +39,7 @@ public class EmpresaQuery {
         soql.append("       AND empresa.cnpj_cont_numeros__c  = '"+cnpjContabilidade+"'         ");
         
         // FILTROS
+        if(empresaDTO != null)
         soql.append(empresaFiltroQuery(empresaDTO));
         
         if(!contagem){
@@ -79,6 +80,7 @@ public class EmpresaQuery {
         soql.append("       AND empresa.cnpj_cont_numeros__c  = '"+cnpjContabilidade+"'         ");
         
         // FILTROS
+        if(empresaDTO != null)
         soql.append(empresaFiltroQuery(empresaDTO));
         
         if(!contagem){
