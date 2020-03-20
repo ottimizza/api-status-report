@@ -1,5 +1,6 @@
 package br.com.ottimizza.statusreportapi.domain.responses;
 
+import br.com.ottimizza.statusreportapi.domain.criteria.PageCriteria;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -27,4 +28,16 @@ public class PageInfoResponseObject implements Serializable {
 
     @JsonProperty("totalElements")
     private long totalElements;
+    
+    public PageInfoResponseObject(PageCriteria pageCriteria, int quantidadeResultados) {
+        this.pageIndex = pageCriteria.pageIndex;
+        this.pageSize = pageCriteria.pageSize;
+        this.totalElements = quantidadeResultados;
+        
+        this.totalPages = Math.floorDiv(quantidadeResultados, pageSize);
+        if(quantidadeResultados % pageSize > 0) this.totalPages++;
+        
+        this.hasNext = ((pageIndex + 1) * pageSize) < quantidadeResultados;
+        this.hasPrevious = (pageIndex > 0 && ((pageIndex - 1) * pageSize) < quantidadeResultados);
+    }
 }

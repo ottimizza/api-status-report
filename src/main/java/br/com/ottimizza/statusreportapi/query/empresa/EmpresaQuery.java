@@ -28,6 +28,7 @@ public class EmpresaQuery {
         soql.append("	FROM salesforce.Empresa__c empresa                                      ");
         soql.append("       WHERE empresa.Empresa_em_Projeto__c < 7                             ");
         soql.append("       AND empresa.Contabilidade_Teste__c = FALSE                          ");
+        soql.append("       AND empresa.tipo_de_projeto__c = 'Possui OIC'                       ");
         soql.append("       AND empresa.cnpj_cont_numeros__c  = '"+cnpjContabilidade+"'         ");
         
         if(!contagem){
@@ -63,6 +64,7 @@ public class EmpresaQuery {
         soql.append("	FROM salesforce.Empresa__c empresa                                      ");
         soql.append("       WHERE empresa.Empresa_em_Projeto__c IN (7,8)                        ");
         soql.append("       AND empresa.Contabilidade_Teste__c = FALSE                          ");
+        soql.append("       AND empresa.tipo_de_projeto__c = 'Possui OIC'                       ");
         soql.append("       AND empresa.cnpj_cont_numeros__c  = '"+cnpjContabilidade+"'         ");
         
         if(!contagem){
@@ -82,6 +84,7 @@ public class EmpresaQuery {
         soql.append("	FROM salesforce.empresa__c empresa                                      ");
         soql.append("       WHERE empresa.empresa_em_projeto__c IN (7,8)                        ");
         soql.append("       AND empresa.contabilidade_teste__c = FALSE                          ");
+        soql.append("       AND empresa.tipo_de_projeto__c = 'Possui OIC'                       ");
         soql.append("       AND empresa.cnpj_cont_numeros__c  = '"+cnpjContabilidade+"'         ");
         
         return soql.toString();

@@ -57,12 +57,10 @@ public class EmpresaService {
             accessToken);
 
         Integer quantidade =  (Integer)(((List) entityContagem.getBody()).get(0));
-        
-        PageInfoResponseObject pageInfo = new PageInfoResponseObject(false, false, pageCriteria.getPageSize(), pageCriteria.getPageIndex(), -1, quantidade);
 
         GenericPageableResponse<EmpresaDTO> empresasEmProjeto = new GenericPageableResponse<>(
                 fromObjects(salesForceListResult), 
-                pageInfo);
+                new PageInfoResponseObject(pageCriteria, quantidade));
 
         return (T) empresasEmProjeto;
     }
@@ -108,12 +106,10 @@ public class EmpresaService {
             accessToken);
 
         Integer quantidade =  (Integer)(((List) entityContagem.getBody()).get(0));
-        
-        PageInfoResponseObject pageInfo = new PageInfoResponseObject(false, false, pageCriteria.getPageSize(), pageCriteria.getPageIndex(), -1, quantidade);
 
         GenericPageableResponse<EmpresaDTO> empresasEmProjeto = new GenericPageableResponse<>(
                 fromObjects(salesForceListResult), 
-                pageInfo);
+                new PageInfoResponseObject(pageCriteria,quantidade));
 
         return (T) empresasEmProjeto;
     }
