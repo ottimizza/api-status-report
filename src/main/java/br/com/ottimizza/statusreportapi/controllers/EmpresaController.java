@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.ottimizza.statusreportapi.services.EmpresaService;
 import br.com.ottimizza.statusreportapi.domain.criteria.PageCriteria;
+import br.com.ottimizza.statusreportapi.domain.dtos.empresa.EmpresaDTO;
 import javax.validation.Valid;
 
 @RestController
@@ -18,8 +19,11 @@ public class EmpresaController {
     EmpresaService empresaService;
 
     @GetMapping("projeto")
-    public ResponseEntity<?> buscaEmpresasEmProjeto(@Valid PageCriteria pageCriteria, OAuth2Authentication authentication) throws Exception {
-        return ResponseEntity.ok(empresaService.buscaListaEmpresasProjeto(pageCriteria, authentication));
+    public ResponseEntity<?> buscaEmpresasEmProjeto(
+            @Valid EmpresaDTO empresaDTO,
+            @Valid PageCriteria pageCriteria, 
+            OAuth2Authentication authentication) throws Exception {
+        return ResponseEntity.ok(empresaService.buscaListaEmpresasProjeto(empresaDTO, pageCriteria, authentication));
     }
     
     @GetMapping("projeto/quantidade")
@@ -28,12 +32,20 @@ public class EmpresaController {
     }
     
     @GetMapping("integrado")
-    public ResponseEntity<?> buscaEmpresasIntegrados(@Valid PageCriteria pageCriteria, OAuth2Authentication authentication) throws Exception {
-        return ResponseEntity.ok(empresaService.buscaListaEmpresasIntegrados(pageCriteria, authentication));
+    public ResponseEntity<?> buscaEmpresasIntegrados(
+            @Valid EmpresaDTO empresaDTO,
+            @Valid PageCriteria pageCriteria, 
+            OAuth2Authentication authentication) throws Exception {
+        return ResponseEntity.ok(empresaService.buscaListaEmpresasIntegrados(empresaDTO, pageCriteria, authentication));
     }
     
     @GetMapping("integrado/quantidade")
     public ResponseEntity<?> buscaQuantidadeEmpresasIntegrados(OAuth2Authentication authentication) throws Exception {
         return ResponseEntity.ok(empresaService.buscaQuantidadeEmpresasIntegrados(authentication));
+    }
+    
+    @GetMapping("lotes_processados")
+    public ResponseEntity<?> quantidadeDeLotesProcessadosEmpresas(OAuth2Authentication authentication) throws Exception {
+        return ResponseEntity.ok(empresaService.quantidadeDeLotesProcessadosEmpresas(authentication));
     }
 }

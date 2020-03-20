@@ -21,6 +21,7 @@ import br.com.ottimizza.statusreportapi.domain.responses.PageInfoResponseObject;
 import static br.com.ottimizza.statusreportapi.domain.mappers.EmpresaMapper.fromObjects;
 import static br.com.ottimizza.statusreportapi.query.empresa.EmpresaQuery.empresasEmProjetoQuery;
 import static br.com.ottimizza.statusreportapi.query.empresa.EmpresaQuery.empresasIntegradosQuery;
+import static br.com.ottimizza.statusreportapi.query.empresa.EmpresaQuery.lotesProcessadosEmpressasQuery;
 
 @Service
 public class EmpresaService {
@@ -31,7 +32,7 @@ public class EmpresaService {
     @Inject
     OAuthClient oauthClient;
     
-    public <T> T buscaListaEmpresasProjeto(PageCriteria pageCriteria, OAuth2Authentication authentication) throws Exception {
+    public <T> T buscaListaEmpresasProjeto(EmpresaDTO empresaDTO, PageCriteria pageCriteria, OAuth2Authentication authentication) throws Exception {
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
         String accessToken = "Bearer " + details.getTokenValue();
 
@@ -79,12 +80,10 @@ public class EmpresaService {
             SalesForceAPIMethodExecution.HEROKU_CONNECT,
             accessToken);
 
-        Integer quantidade =  (Integer)(((List) entityContagem.getBody()).get(0));
-
-        return (T) new GenericResponse<Integer>(quantidade);
+        return (T) new GenericResponse<Integer>((Integer)(((List) entityContagem.getBody()).get(0)));
     }
     
-    public <T> T buscaListaEmpresasIntegrados(PageCriteria pageCriteria, OAuth2Authentication authentication) throws Exception {
+    public <T> T buscaListaEmpresasIntegrados(EmpresaDTO empresaDTO, PageCriteria pageCriteria, OAuth2Authentication authentication) throws Exception {
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
         String accessToken = "Bearer " + details.getTokenValue();
 
@@ -132,8 +131,22 @@ public class EmpresaService {
             SalesForceAPIMethodExecution.HEROKU_CONNECT,
             accessToken);
 
-        Integer quantidade =  (Integer)(((List) entityContagem.getBody()).get(0));
+        return (T) new GenericResponse<Integer>((Integer)(((List) entityContagem.getBody()).get(0)));
+    }
+    
+    public <T> T quantidadeDeLotesProcessadosEmpresas(OAuth2Authentication authentication) throws Exception {
+        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
+        String accessToken = "Bearer " + details.getTokenValue();
 
-        return (T) new GenericResponse<Integer>(quantidade);
+        ResponseEntity<GenericResponse<UserDTO>> usuario = oauthClient.getUserInfo(accessToken);
+        String cnpjContabilidade = usuario.getBody().getRecord().getOrganization().getCnpj();
+        
+        // CONTAGEM DE EMPRESAS
+        HttpEntity entityContagem = salesforceClient.getQuery(
+            lotesProcessadosEmpressasQuery(cnpjContabilidade),
+            SalesForceAPIMethodExecution.HEROKU_CONNECT,
+            accessToken);
+
+        return (T) new GenericResponse<Double>((Double)(((List) entityContagem.getBody()).get(0)));
     }
 }

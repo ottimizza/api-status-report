@@ -73,4 +73,17 @@ public class EmpresaQuery {
 
         return soql.toString();
     }
+    
+    public static String lotesProcessadosEmpressasQuery(String cnpjContabilidade){
+        
+        StringBuilder soql = new StringBuilder();
+        soql.append("   SELECT                                                                  ");
+        soql.append("       SUM(lotes_processados__c)                                           ");
+        soql.append("	FROM salesforce.empresa__c empresa                                      ");
+        soql.append("       WHERE empresa.empresa_em_projeto__c IN (7,8)                        ");
+        soql.append("       AND empresa.contabilidade_teste__c = FALSE                          ");
+        soql.append("       AND empresa.cnpj_cont_numeros__c  = '"+cnpjContabilidade+"'         ");
+        
+        return soql.toString();
+    }
 }
