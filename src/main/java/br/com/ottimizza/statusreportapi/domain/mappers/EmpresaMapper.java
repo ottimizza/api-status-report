@@ -19,12 +19,20 @@ public class EmpresaMapper {
             } catch (Exception e) {}
         }
 
+        SimpleDateFormat dateTimeStampFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         //TRATAMENTO DE DATA (proximo_passo__c)
         Date proximoPasso = null;
         if(objects[7] != null){
-            SimpleDateFormat dateTimeStampFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
             try {
                 proximoPasso = dateTimeStampFormatter.parse((String) objects[7]);
+            } catch (Exception e) {}
+        }
+
+        //TRATAMENTO DE DATA (proximo_passo__c)
+        Date ultimoLoteProcessado = null;
+        if(objects[11] != null){
+            try {
+                ultimoLoteProcessado = dateTimeStampFormatter.parse((String) objects[11]);
             } catch (Exception e) {}
         }
 
@@ -40,6 +48,8 @@ public class EmpresaMapper {
             .nome_resumido__c           (objects[8]  != null ? (String) objects[8]  : null)
             .resumo_prox_passo__c       (objects[9]  != null ? (String) objects[9]  : null)
             .o_que_foi_feito_hoje__c    (objects[10] != null ? (String) objects[10] : null)
+            .ultimo_lote_processado__c  (ultimoLoteProcessado)
+            .lotes_processados__c       ((Double) objects[12])
         .build();
     }
 

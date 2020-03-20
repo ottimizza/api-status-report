@@ -41,7 +41,7 @@ public class EmpresaService {
 
         // LISTA DE EMPRESAS
         HttpEntity entityLista = salesforceClient.getQuery(
-            empresasEmProjetoQuery(cnpjContabilidade, pageCriteria, false),
+            empresasEmProjetoQuery(cnpjContabilidade, empresaDTO, pageCriteria, false),
             SalesForceAPIMethodExecution.HEROKU_CONNECT,
             accessToken);
 
@@ -52,7 +52,7 @@ public class EmpresaService {
 
         // CONTAGEM DE EMPRESAS
         HttpEntity entityContagem = salesforceClient.getQuery(
-            empresasEmProjetoQuery(cnpjContabilidade, pageCriteria, true),
+            empresasEmProjetoQuery(cnpjContabilidade, empresaDTO, pageCriteria, true),
             SalesForceAPIMethodExecution.HEROKU_CONNECT,
             accessToken);
 
@@ -74,7 +74,7 @@ public class EmpresaService {
         
         // CONTAGEM DE EMPRESAS
         HttpEntity entityContagem = salesforceClient.getQuery(
-            empresasEmProjetoQuery(cnpjContabilidade, null, true),
+            empresasEmProjetoQuery(cnpjContabilidade, null, null, true),
             SalesForceAPIMethodExecution.HEROKU_CONNECT,
             accessToken);
 
@@ -90,7 +90,7 @@ public class EmpresaService {
 
         // LISTA DE EMPRESAS
         HttpEntity entityLista = salesforceClient.getQuery(
-            empresasIntegradosQuery(cnpjContabilidade, pageCriteria, false),
+            empresasIntegradosQuery(cnpjContabilidade, empresaDTO, pageCriteria, false),
             SalesForceAPIMethodExecution.HEROKU_CONNECT,
             accessToken);
 
@@ -101,7 +101,7 @@ public class EmpresaService {
 
         // CONTAGEM DE EMPRESAS
         HttpEntity entityContagem = salesforceClient.getQuery(
-            empresasIntegradosQuery(cnpjContabilidade, pageCriteria, true),
+            empresasIntegradosQuery(cnpjContabilidade, empresaDTO, pageCriteria, true),
             SalesForceAPIMethodExecution.HEROKU_CONNECT,
             accessToken);
 
@@ -123,7 +123,7 @@ public class EmpresaService {
         
         // CONTAGEM DE EMPRESAS
         HttpEntity entityContagem = salesforceClient.getQuery(
-            empresasIntegradosQuery(cnpjContabilidade, null, true),
+            empresasIntegradosQuery(cnpjContabilidade, null, null, true),
             SalesForceAPIMethodExecution.HEROKU_CONNECT,
             accessToken);
 

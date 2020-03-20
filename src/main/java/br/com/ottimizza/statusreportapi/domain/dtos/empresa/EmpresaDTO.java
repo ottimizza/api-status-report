@@ -23,4 +23,6 @@ public class EmpresaDTO implements Serializable{
     private String  nome_resumido__c;
     private String  resumo_prox_passo__c;
     private String  o_que_foi_feito_hoje__c;
+    private Date    ultimo_lote_processado__c;
+    private Double  lotes_processados__c;
 }
