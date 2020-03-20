@@ -18,7 +18,22 @@ public class EmpresaController {
     EmpresaService empresaService;
 
     @GetMapping("projeto")
-    public ResponseEntity<?> buscaEmpresas(@Valid PageCriteria pageCriteria, OAuth2Authentication authentication) throws Exception {
-        return ResponseEntity.ok(empresaService.executeSOQL(pageCriteria, authentication));
+    public ResponseEntity<?> buscaEmpresasEmProjeto(@Valid PageCriteria pageCriteria, OAuth2Authentication authentication) throws Exception {
+        return ResponseEntity.ok(empresaService.buscaListaEmpresasProjeto(pageCriteria, authentication));
+    }
+    
+    @GetMapping("projeto/quantidade")
+    public ResponseEntity<?> buscaQuantidadeEmpresasEmProjeto(OAuth2Authentication authentication) throws Exception {
+        return ResponseEntity.ok(empresaService.buscaQuantidadeEmpresasProjeto(authentication));
+    }
+    
+    @GetMapping("integrado")
+    public ResponseEntity<?> buscaEmpresasIntegrados(@Valid PageCriteria pageCriteria, OAuth2Authentication authentication) throws Exception {
+        return ResponseEntity.ok(empresaService.buscaListaEmpresasIntegrados(pageCriteria, authentication));
+    }
+    
+    @GetMapping("integrado/quantidade")
+    public ResponseEntity<?> buscaQuantidadeEmpresasIntegrados(OAuth2Authentication authentication) throws Exception {
+        return ResponseEntity.ok(empresaService.buscaQuantidadeEmpresasIntegrados(authentication));
     }
 }

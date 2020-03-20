@@ -16,10 +16,11 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.stereotype.Service;
 
-import static br.com.ottimizza.statusreportapi.domain.mappers.EmpresaMapper.fromObjects;
 import br.com.ottimizza.statusreportapi.domain.responses.GenericPageableResponse;
 import br.com.ottimizza.statusreportapi.domain.responses.PageInfoResponseObject;
+import static br.com.ottimizza.statusreportapi.domain.mappers.EmpresaMapper.fromObjects;
 import static br.com.ottimizza.statusreportapi.query.empresa.EmpresaQuery.empresasEmProjetoQuery;
+import static br.com.ottimizza.statusreportapi.query.empresa.EmpresaQuery.empresasIntegradosQuery;
 
 @Service
 public class EmpresaService {
@@ -30,7 +31,7 @@ public class EmpresaService {
     @Inject
     OAuthClient oauthClient;
     
-    public <T> T executeSOQL(PageCriteria pageCriteria, OAuth2Authentication authentication) throws Exception {
+    public <T> T buscaListaEmpresasProjeto(PageCriteria pageCriteria, OAuth2Authentication authentication) throws Exception {
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
         String accessToken = "Bearer " + details.getTokenValue();
 
@@ -39,8 +40,8 @@ public class EmpresaService {
 
         // LISTA DE EMPRESAS
         HttpEntity entityLista = salesforceClient.getQuery(
-            empresasEmProjetoQuery(cnpjContabilidade, pageCriteria, false), 
-            SalesForceAPIMethodExecution.HEROKU_CONNECT, 
+            empresasEmProjetoQuery(cnpjContabilidade, pageCriteria, false),
+            SalesForceAPIMethodExecution.HEROKU_CONNECT,
             accessToken);
 
         List<Object[]> salesForceListResult = new ArrayList<>();
@@ -50,8 +51,8 @@ public class EmpresaService {
 
         // CONTAGEM DE EMPRESAS
         HttpEntity entityContagem = salesforceClient.getQuery(
-            empresasEmProjetoQuery(cnpjContabilidade, pageCriteria, true), 
-            SalesForceAPIMethodExecution.HEROKU_CONNECT, 
+            empresasEmProjetoQuery(cnpjContabilidade, pageCriteria, true),
+            SalesForceAPIMethodExecution.HEROKU_CONNECT,
             accessToken);
 
         Integer quantidade =  (Integer)(((List) entityContagem.getBody()).get(0));
@@ -63,5 +64,76 @@ public class EmpresaService {
                 pageInfo);
 
         return (T) empresasEmProjeto;
+    }
+    
+    public <T> T buscaQuantidadeEmpresasProjeto(OAuth2Authentication authentication) throws Exception {
+        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
+        String accessToken = "Bearer " + details.getTokenValue();
+
+        ResponseEntity<GenericResponse<UserDTO>> usuario = oauthClient.getUserInfo(accessToken);
+        String cnpjContabilidade = usuario.getBody().getRecord().getOrganization().getCnpj();
+        
+        // CONTAGEM DE EMPRESAS
+        HttpEntity entityContagem = salesforceClient.getQuery(
+            empresasEmProjetoQuery(cnpjContabilidade, null, true),
+            SalesForceAPIMethodExecution.HEROKU_CONNECT,
+            accessToken);
+
+        Integer quantidade =  (Integer)(((List) entityContagem.getBody()).get(0));
+
+        return (T) new GenericResponse<Integer>(quantidade);
+    }
+    
+    public <T> T buscaListaEmpresasIntegrados(PageCriteria pageCriteria, OAuth2Authentication authentication) throws Exception {
+        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
+        String accessToken = "Bearer " + details.getTokenValue();
+
+        ResponseEntity<GenericResponse<UserDTO>> usuario = oauthClient.getUserInfo(accessToken);
+        String cnpjContabilidade = usuario.getBody().getRecord().getOrganization().getCnpj();
+
+        // LISTA DE EMPRESAS
+        HttpEntity entityLista = salesforceClient.getQuery(
+            empresasIntegradosQuery(cnpjContabilidade, pageCriteria, false),
+            SalesForceAPIMethodExecution.HEROKU_CONNECT,
+            accessToken);
+
+        List<Object[]> salesForceListResult = new ArrayList<>();
+        ((List) entityLista.getBody()).stream().forEach(
+            objects -> salesForceListResult.add(((ArrayList<Object>) objects).toArray())
+        );
+
+        // CONTAGEM DE EMPRESAS
+        HttpEntity entityContagem = salesforceClient.getQuery(
+            empresasIntegradosQuery(cnpjContabilidade, pageCriteria, true),
+            SalesForceAPIMethodExecution.HEROKU_CONNECT,
+            accessToken);
+
+        Integer quantidade =  (Integer)(((List) entityContagem.getBody()).get(0));
+        
+        PageInfoResponseObject pageInfo = new PageInfoResponseObject(false, false, pageCriteria.getPageSize(), pageCriteria.getPageIndex(), -1, quantidade);
+
+        GenericPageableResponse<EmpresaDTO> empresasEmProjeto = new GenericPageableResponse<>(
+                fromObjects(salesForceListResult), 
+                pageInfo);
+
+        return (T) empresasEmProjeto;
+    }
+    
+    public <T> T buscaQuantidadeEmpresasIntegrados(OAuth2Authentication authentication) throws Exception {
+        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
+        String accessToken = "Bearer " + details.getTokenValue();
+
+        ResponseEntity<GenericResponse<UserDTO>> usuario = oauthClient.getUserInfo(accessToken);
+        String cnpjContabilidade = usuario.getBody().getRecord().getOrganization().getCnpj();
+        
+        // CONTAGEM DE EMPRESAS
+        HttpEntity entityContagem = salesforceClient.getQuery(
+            empresasIntegradosQuery(cnpjContabilidade, null, true),
+            SalesForceAPIMethodExecution.HEROKU_CONNECT,
+            accessToken);
+
+        Integer quantidade =  (Integer)(((List) entityContagem.getBody()).get(0));
+
+        return (T) new GenericResponse<Integer>(quantidade);
     }
 }
