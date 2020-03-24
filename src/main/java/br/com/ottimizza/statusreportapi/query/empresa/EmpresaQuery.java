@@ -6,7 +6,7 @@ import br.com.ottimizza.statusreportapi.domain.dtos.empresa.EmpresaDTO;
 import java.text.SimpleDateFormat;
 import static br.com.ottimizza.statusreportapi.query.utils.UtilsQuery.makeStartsAndEndsWith;
 import static br.com.ottimizza.statusreportapi.query.utils.UtilsQuery.stringFormat;
-import java.lang.reflect.Field;
+import java.util.Arrays;
 
 public class EmpresaQuery {
 
@@ -42,10 +42,8 @@ public class EmpresaQuery {
         if(empresaDTO != null)
         soql.append(empresaFiltroQuery(empresaDTO));
         
-        if(!contagem){
-        soql.append("       ORDER BY name                                                       ");
+        if(!contagem)
         soql.append(empresaOrderByAndPaginationQuery(pageCriteria));
-        }
 
         return soql.toString();
     }
@@ -83,10 +81,8 @@ public class EmpresaQuery {
         if(empresaDTO != null)
         soql.append(empresaFiltroQuery(empresaDTO));
         
-        if(!contagem){
-        soql.append("       ORDER BY name                                                       ");
+        if(!contagem)
         soql.append(empresaOrderByAndPaginationQuery(pageCriteria));
-        }
         
         return soql.toString();
     }
@@ -149,6 +145,19 @@ public class EmpresaQuery {
     private static String empresaOrderByAndPaginationQuery(PageCriteria pageCriteria){
         StringBuilder orderByPagination = new StringBuilder();
         
+        //ORDENAÇÃO DO CAMPO ESPECÍFICO
+        boolean contemCampo = Arrays.asList(EmpresaDTO.class.getDeclaredFields()).stream().anyMatch(
+                campo -> campo.getName().equals(pageCriteria.sortBy)
+        );
+        String campo = contemCampo ? pageCriteria.sortBy : "name";
+        
+        //ORDENAÇÃO CRESCENTE OU DESCRECENTE
+        boolean tipoOrdenacao = Arrays.asList("asc","desc").contains(pageCriteria.sortOrder);
+        String ordenacao = tipoOrdenacao ? pageCriteria.sortOrder : "ASC";
+        
+        orderByPagination.append("  ORDER BY "+campo+" "+ordenacao);
+        
+        //PAGINAÇÃO
         orderByPagination.append("  LIMIT "+pageCriteria.getPageSize());
         orderByPagination.append("  OFFSET "+(pageCriteria.getPageIndex()*pageCriteria.getPageSize()));
         return orderByPagination.toString();
