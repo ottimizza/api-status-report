@@ -9,6 +9,16 @@ oauth2-config:
   client-secret: ${CLIENT_SECRET:8faedc0e6e1520d13f06f787d6760c303f3e8768}
   server-url: ${OAUTH2_URL:https://development-oauth-server.herokuapp.com}
 
+salesforce:
+  service:
+    name: salesforce-service
+    url: ${SALESFORCE_BASE_URL:https://api-salesforce-client.herokuapp.com}
+
+oauth:
+  service:
+    name: oauth-service
+    url: ${OAUTH2_URL:https://development-oauth-server.herokuapp.com}    
+
 security:
   oauth2:
     client:
