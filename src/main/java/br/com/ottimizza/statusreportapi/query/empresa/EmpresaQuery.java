@@ -36,7 +36,7 @@ public class EmpresaQuery {
         soql.append("       WHERE empresa.Empresa_em_Projeto__c < 7                             ");
         soql.append("       AND empresa.Contabilidade_Teste__c = FALSE                          ");
         soql.append("       AND empresa.tipo_de_projeto__c = 'Possui OIC'                       ");
-        soql.append("       AND empresa.cnpj_cont_numeros__c  = '49062458000164'         ");
+        soql.append("       AND empresa.cnpj_cont_numeros__c  = '"+cnpjContabilidade+"'         ");
         
         // FILTROS
         if(empresaDTO != null)
