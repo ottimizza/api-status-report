@@ -15,7 +15,7 @@ public class EmpresaQuery {
         soql.append("   SELECT                                                                  ");
         
         if(contagem)
-        soql.append("       COUNT(*)                                                            ");
+        soql.append("       COUNT()                                                            ");
         else{            
         soql.append("       id,                                                                 ");
         soql.append("       name,                                                               ");
@@ -32,11 +32,11 @@ public class EmpresaQuery {
         soql.append("       lotes_processados__c                                                ");
         }
         
-        soql.append("	FROM salesforce.Empresa__c empresa                                      ");
+        soql.append("	FROM Empresa__c empresa                                                 ");
         soql.append("       WHERE empresa.Empresa_em_Projeto__c < 7                             ");
         soql.append("       AND empresa.Contabilidade_Teste__c = FALSE                          ");
         soql.append("       AND empresa.tipo_de_projeto__c = 'Possui OIC'                       ");
-        soql.append("       AND empresa.cnpj_cont_numeros__c  = '"+cnpjContabilidade+"'         ");
+        soql.append("       AND empresa.cnpj_cont_numeros__c  = '49062458000164'         ");
         
         // FILTROS
         if(empresaDTO != null)
@@ -54,7 +54,7 @@ public class EmpresaQuery {
         soql.append("   SELECT                                                                  ");
         
         if(contagem)
-        soql.append("       COUNT(*)                                                            ");
+        soql.append("       COUNT()                                                            ");
         else{            
         soql.append("       id,                                                                 ");
         soql.append("       name,                                                               ");
@@ -71,7 +71,7 @@ public class EmpresaQuery {
         soql.append("       lotes_processados__c                                                ");
         }
         
-        soql.append("	FROM salesforce.Empresa__c empresa                                      ");
+        soql.append("	FROM Empresa__c empresa                                      ");
         soql.append("       WHERE empresa.Empresa_em_Projeto__c IN (7,8)                        ");
         soql.append("       AND empresa.Contabilidade_Teste__c = FALSE                          ");
         soql.append("       AND empresa.tipo_de_projeto__c = 'Possui OIC'                       ");
@@ -92,7 +92,7 @@ public class EmpresaQuery {
         StringBuilder soql = new StringBuilder();
         soql.append("   SELECT                                                                  ");
         soql.append("       SUM(lotes_processados__c)                                           ");
-        soql.append("	FROM salesforce.empresa__c empresa                                      ");
+        soql.append("	FROM empresa__c empresa                                      ");
         soql.append("       WHERE empresa.empresa_em_projeto__c IN (7,8)                        ");
         soql.append("       AND empresa.contabilidade_teste__c = FALSE                          ");
         soql.append("       AND empresa.tipo_de_projeto__c = 'Possui OIC'                       ");
